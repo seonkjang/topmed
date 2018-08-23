@@ -1,0 +1,16 @@
+##########################
+######### Pruning ########
+##########################
+
+#####Stratus#####
+
+## Create command file ##
+cd /data/scott/TOPMed/freeze.6a/63663/topmed-dcc/exchange/phs000964_TOPMed_WGS_JHS/Combined_Study_Data/Genotypes/freeze.6a/minDP10
+
+for i in {1..22}; do echo "nohup bcftools view -f 'PASS' -i 'MAF>0.05' -Oz -o freeze.6a.chr$i.common.pass.gtonly.minDP10.vcf.gz freeze.6a.chr$i.pass_and_fail.gtonly.minDP10.bcf &"; done > kinship_prun.sh;
+echo "nohup bcftools view -f 'PASS' -i 'MAF>0.05' -Oz -o freeze.6a.chrX.common.pass.gtonly.minDP10.vcf.gz freeze.6a.chrX.pass_and_fail.gtonly.minDP10.bcf &" >> kinship_prun.sh
+
+## Execute command (on Stratus) ##
+bash kinship_prun.sh
+
+

@@ -1,4 +1,14 @@
 #Download reference genotype files (build 38)
+
+cd /data/scott/ancestry
 for i in {1..22}; do wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/ALL.chr${i}_GRCh38.genotypes.20170504.vcf.gz & done
  
-#Pull out sites
+
+
+#Pull out sites from my common genotype files
+
+cd /data/scott/TOPMed/freeze.6a/63663/topmed-dcc/exchange/phs000964_TOPMed_WGS_JHS/Combined_Study_Data/Genotypes/freeze.6a/minDP10
+for i in {1..22}; do zgrep -v "^#" freeze.6a.chr${i}.common.AN.pass.gtonly.minDP10.vcf.gz | cut -f-2  > freeze.6a.chr${i}.common.AN.pass.gtonly.minDP10.sites.txt & done
+
+
+

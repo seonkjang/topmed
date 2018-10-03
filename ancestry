@@ -5,20 +5,26 @@ for i in {1..22}; do wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130
  
 
 
-### Pull out sites from my common genotype files
+### Pull out sites from our common genotype files
 
 cd /data/scott/TOPMed/freeze.6a/63663/topmed-dcc/exchange/phs000964_TOPMed_WGS_JHS/Combined_Study_Data/Genotypes/freeze.6a/minDP10
 for i in {1..22}; do zgrep -v "^#" freeze.6a.chr${i}.common.AN.pass.gtonly.minDP10.vcf.gz | cut -f-2  > freeze.6a.chr${i}.common.AN.pass.gtonly.minDP10.sites.txt & done
 
 
 
-### Extract relevant SNPs from 1000 (run in bash in terminal window
+### Extract relevant SNPs from 1000 (run in bash in terminal window)
 cd /data/scott/TOPMed/freeze.6a/63663/topmed-dcc/exchange/phs000964_TOPMed_WGS_JHS/Combined_Study_Data/Genotypes/freeze.6a/minDP10
 
 for i in {1..2};do bcftools view -Oz -o /data/scott/ancestry/1000G_TOPMed_Common/chr${i}.1000g.TOPMed_sites -R freeze.6a.chr${i}.common.AN.pass.gtonly.minDP10.sites.txt /data/scott/ancestry/ALL.chr${i}_GRCh38.genotypes.20170504.vcf.gz & done
 
 
 ### Concatenate
+cd /data/scott/ancestry/1000G_TOPMed_Common
+(zcat chr1.1000g.TOPMed_sites; zgrep -v '#' chr2.1000g.TOPMed_sites; zgrep -v '#' chr3.1000g.TOPMed_sites; zgrep -v '#' chr4.1000g.TOPMed_sites; zgrep -v '#' chr5.1000g.TOPMed_sites; zgrep -v '#' chr6.1000g.TOPMed_sites; zgrep -v '#' chr7.1000g.TOPMed_sites; zgrep -v '#' chr8.1000g.TOPMed_sites; zgrep -v '#' chr9.1000g.TOPMed_sites; zgrep -v '#' chr10.1000g.TOPMed_sites; zgrep -v '#' chr11.1000g.TOPMed_sites; zgrep -v '#' chr12.1000g.TOPMed_sites; zgrep -v '#' chr13.1000g.TOPMed_sites; zgrep -v '#' chr14.1000g.TOPMed_sites; zgrep -v '#' chr15.1000g.TOPMed_sites; zgrep -v '#' chr16.1000g.TOPMed_sites; zgrep -v '#' chr17.1000g.TOPMed_sites; zgrep -v '#' chr18.1000g.TOPMed_sites; zgrep -v '#' chr19.1000g.TOPMed_sites; zgrep -v '#' chr20.1000g.TOPMed_sites; zgrep -v '#' chr21.1000g.TOPMed_sites; zgrep -v '#' chr22.1000g.TOPMed_sites) | bgzip -c > chrALL.1000g.TOPMed_sites.vcf.gz &
+
 
 
 ### Calculate PCs using plink
+cd /data/scott/ancestry/1000G_TOPMed_Common
+plink1.9   --vcf chrALL.1000g.TOPMed_sites.vcf.gz --vcf-half-call m --geno 0.01 --indep-pairwise 100kb 5 .1 & 
+plink1.9   --vcf chrALL.1000g.TOPMed_sites.vcf.gz --extract plink.prune.in --pca var-wts --make-bed --out chrALL.1000g.TOPMed_sites.pruned.vcf.gz")

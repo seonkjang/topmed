@@ -22,10 +22,11 @@ for i in {1..2};do bcftools view -Oz -o /data/scott/ancestry/1000G_TOPMed_Common
 cd /data/scott/ancestry/1000G_TOPMed_Common
 (zcat chr1.1000g.TOPMed_sites; zgrep -v '#' chr2.1000g.TOPMed_sites; zgrep -v '#' chr3.1000g.TOPMed_sites; zgrep -v '#' chr4.1000g.TOPMed_sites; zgrep -v '#' chr5.1000g.TOPMed_sites; zgrep -v '#' chr6.1000g.TOPMed_sites; zgrep -v '#' chr7.1000g.TOPMed_sites; zgrep -v '#' chr8.1000g.TOPMed_sites; zgrep -v '#' chr9.1000g.TOPMed_sites; zgrep -v '#' chr10.1000g.TOPMed_sites; zgrep -v '#' chr11.1000g.TOPMed_sites; zgrep -v '#' chr12.1000g.TOPMed_sites; zgrep -v '#' chr13.1000g.TOPMed_sites; zgrep -v '#' chr14.1000g.TOPMed_sites; zgrep -v '#' chr15.1000g.TOPMed_sites; zgrep -v '#' chr16.1000g.TOPMed_sites; zgrep -v '#' chr17.1000g.TOPMed_sites; zgrep -v '#' chr18.1000g.TOPMed_sites; zgrep -v '#' chr19.1000g.TOPMed_sites; zgrep -v '#' chr20.1000g.TOPMed_sites; zgrep -v '#' chr21.1000g.TOPMed_sites; zgrep -v '#' chr22.1000g.TOPMed_sites) | bgzip -c > chrALL.1000g.TOPMed_sites.vcf.gz &
 
-###
+### Sort (by making bed, bim, fam file)
 
 
 ### Calculate PCs using plink
 cd /data/scott/ancestry/1000G_TOPMed_Common
-plink1.9   --vcf chrALL.1000g.TOPMed_sites.vcf.gz --vcf-half-call m --geno 0.01 --indep-pairwise 100kb 5 .1 & 
-plink1.9   --vcf chrALL.1000g.TOPMed_sites.vcf.gz --extract plink.prune.in --pca var-wts --make-bed --out chrALL.1000g.TOPMed_sites.pruned.vcf.gz")
+plink1.9 --vcf chrALL.1000g.TOPMed_sites.vcf.gz --make-bed --vcf-half-call m --out chrALL.1000g.TOPMed_sites #Sorting
+plink1.9 --bfile chrALL.1000g.TOPMed_sites --indep-pairwise 100kb 5 .1 --geno 0.01 & #LD pruning
+plink1.9 --bfile chrALL.1000g.TOPMed_sites --extract plink.prune.in --pca var-wts --make-bed --out chrALL.1000g.TOPMed_sites.pruned & #PCA
